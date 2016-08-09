@@ -49,7 +49,7 @@ epsilon_neighbours_t* get_epsilon_neighbours(
 	point_t* points,
 	unsigned int num_points,
 	double epsilon,
-	double(*dist)(point_t* a, point_t* b))
+	double (*dist)(point_t* a, point_t* b))
 {
 	epsilon_neighbours_t* en = (epsilon_neighbours_t *)
 		calloc(1, sizeof(epsilon_neighbours_t));
@@ -87,9 +87,9 @@ void print_epsilon_neighbours(
 		while (h)
 		{
 			printf("(%lfm, %lf, %lf)\n",
-				points[h->index].x,
-				points[h->index].y,
-				points[h->index].z);
+			       points[h->index].x,
+			       points[h->index].y,
+			       points[h->index].z);
 			h = h->next;
 		}
 	}
@@ -115,7 +115,7 @@ void dbscan(
 	unsigned int num_points,
 	double epsilon,
 	unsigned int minpts,
-	double(*dist)(point_t* a, point_t* b))
+	double (*dist)(point_t* a, point_t* b))
 {
 	unsigned int i, cluster_id = 0;
 	for (i = 0; i < num_points; ++i)
@@ -123,8 +123,8 @@ void dbscan(
 		if (points[i].cluster_id == UNCLASSIFIED)
 		{
 			if (expand(i, cluster_id, points,
-				num_points, epsilon, minpts,
-				dist) == CORE_POINT)
+			           num_points, epsilon, minpts,
+			           dist) == CORE_POINT)
 				++cluster_id;
 		}
 	}
@@ -137,13 +137,13 @@ int expand(
 	unsigned int num_points,
 	double epsilon,
 	unsigned int minpts,
-	double(*dist)(point_t* a, point_t* b))
+	double (*dist)(point_t* a, point_t* b))
 {
 	int return_value = NOT_CORE_POINT;
 	epsilon_neighbours_t* seeds =
 		get_epsilon_neighbours(index, points,
-		num_points, epsilon,
-		dist);
+		                       num_points, epsilon,
+		                       dist);
 	if (seeds == NULL)
 		return FAILURE;
 
@@ -163,7 +163,7 @@ int expand(
 		while (h)
 		{
 			spread(h->index, seeds, cluster_id, points,
-				num_points, epsilon, minpts, dist);
+			       num_points, epsilon, minpts, dist);
 			h = h->next;
 		}
 
@@ -181,12 +181,12 @@ int spread(
 	unsigned int num_points,
 	double epsilon,
 	unsigned int minpts,
-	double(*dist)(point_t* a, point_t* b))
+	double (*dist)(point_t* a, point_t* b))
 {
 	epsilon_neighbours_t* spread =
 		get_epsilon_neighbours(index, points,
-		num_points, epsilon,
-		dist);
+		                       num_points, epsilon,
+		                       dist);
 	if (spread == NULL)
 		return FAILURE;
 	if (spread->num_members >= minpts)

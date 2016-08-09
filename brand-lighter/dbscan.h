@@ -43,7 +43,7 @@ epsilon_neighbours_t* get_epsilon_neighbours(
 	point_t* points,
 	unsigned int num_points,
 	double epsilon,
-	double(*dist)(point_t* a, point_t* b));
+	double (*dist)(point_t* a, point_t* b));
 void print_epsilon_neighbours(
 	point_t* points,
 	epsilon_neighbours_t* en);
@@ -53,7 +53,7 @@ void dbscan(
 	unsigned int num_points,
 	double epsilon,
 	unsigned int minpts,
-	double(*dist)(point_t* a, point_t* b));
+	double (*dist)(point_t* a, point_t* b));
 int expand(
 	unsigned int index,
 	unsigned int cluster_id,
@@ -61,7 +61,7 @@ int expand(
 	unsigned int num_points,
 	double epsilon,
 	unsigned int minpts,
-	double(*dist)(point_t* a, point_t* b));
+	double (*dist)(point_t* a, point_t* b));
 int spread(
 	unsigned int index,
 	epsilon_neighbours_t* seeds,
@@ -70,7 +70,7 @@ int spread(
 	unsigned int num_points,
 	double epsilon,
 	unsigned int minpts,
-	double(*dist)(point_t* a, point_t* b));
+	double (*dist)(point_t* a, point_t* b));
 double euclidean_dist(point_t* a, point_t* b);
 double adjacent_intensity_dist(point_t* a, point_t* b);
 unsigned int parse_input(

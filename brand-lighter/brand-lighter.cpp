@@ -13,7 +13,7 @@ using namespace std;
 int main(int argc, char** argv)
 {
 	// task meta parser.
-	string task_meta_path = "c:/pic/working_home/tasks/1/meta";
+	string task_meta_path = "c:/pic/working_home/tasks/5/meta";
 	task_param task_meta = parse_task_meta_file(task_meta_path);
 
 	// template parser.
@@ -30,19 +30,26 @@ int main(int argc, char** argv)
 	if (task_meta.need_stitch)
 	{
 		Stitcher stitcher = Stitcher::createDefault();
+
 		vector<Img> source_img_list = task_meta.source_image_list;
+		vector<Mat> source_mat_list;
+		for (Img img : source_img_list) source_mat_list.push_back(img.mat);
+		
 		Mat pano;
-		Stitcher::Status status = stitcher.stitch(source_img_list, pano);
+		Stitcher::Status status = stitcher.stitch(source_mat_list, pano);
+		imshow("pano", pano);
+		imwrite("c:/pic/stitching_test/result.jpg", pano);
 		if (status != Stitcher::OK)
 		{
 			cout << "error to stitch" << endl;
 			exit(1);
 		}
 		task_meta.need_stitch = false;
-		task_meta.source_image_list.empty();
-		task_meta.source_image_list.push_back({"",pano});
+		task_meta.source_image_list.clear();
+		task_meta.source_image_list.push_back({"x:/temp/pano.jpg", pano});
 	}
-
+	// obj det for every source img.
+	int file_name_index = 1;
 	for (auto source_img : task_meta.source_image_list)
 	{
 		// Object Detection Template by Tempalte.
@@ -69,21 +76,24 @@ int main(int argc, char** argv)
 		cout << "sum: " << sum << endl;
 		for (auto i = logo_count_map.begin(); i != logo_count_map.end(); ++i)
 		{
-			cout << i->first << ": " << "count:" << i->second << " percent:" << i->second / sum * 100 << "%" << endl;
+			cout << i->first << ": " << "count:" << i->second << endl;
 		}
 
 		//Output to file.
 		cout << "---------------------------" << endl;
 		string source_img_path = source_img.file_path;
 		auto img_scene_name = source_img_path.substr(source_img_path.find_last_of("/") + 1);
-		ofstream fout(task_meta.output_dir + "/" + img_scene_name + ".txt");
+		ofstream fout(task_meta.output_dir + "/" + to_string(file_name_index++) + ".txt");
+		fout << "FILEPATH: " << source_img.file_path << endl;
+		fout << "---------------------------" << endl;
 		for (auto i = logo_count_map.begin(); i != logo_count_map.end(); ++i)
 		{
-			fout << i->first << ": " << "count:" << i->second << " percent:" << i->second / sum * 100 << "%" << endl;
+			fout << i->first << ": " << "count:" << i->second << endl;
 		}
+		fout.close();
+		
 	}
 
 	waitKey();
-
 	return 0;
 }

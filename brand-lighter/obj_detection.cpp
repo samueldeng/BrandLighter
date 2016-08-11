@@ -154,8 +154,6 @@ objdet_ret detect_obj_with_score(Mat source_mat, model_param model)
 	increase_contrast_ret ic_ret = increase_contrast(model_img, source_mat, model);
 	Mat img_object = ic_ret.img_object;
 	Mat img_scene = ic_ret.img_scene;
-	imshow("img_object", img_object);
-	imshow("img_scene", img_scene);
 
 	//Detect the keypoints using SURF Detector
 	int hessian_threshold = 500;

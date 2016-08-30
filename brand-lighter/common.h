@@ -27,8 +27,8 @@ struct model_param
 
 struct task_param
 {
-	string output_dir;
-	bool need_stitch;
+	string db_key;
+	string connection_string;
 	vector<Img> source_image_list;
 };
 

@@ -49,13 +49,11 @@ task_param parse_task_meta_file(string task_meta_file_path)
 {
 	task_param task_par;
 	ifstream fin(task_meta_file_path);
-	task_par.output_dir = "";
-	task_par.need_stitch = false;
+	task_par.db_key = "";
+	task_par.connection_string = "";
 
-	if (!fin.eof()) getline(fin, task_par.output_dir);
-	string is_stitching_str;
-	if (!fin.eof()) getline(fin, is_stitching_str);
-	task_par.need_stitch = stoi(is_stitching_str) == 0 ? false : true;
+	if (!fin.eof()) getline(fin, task_par.db_key);
+	if (!fin.eof()) getline(fin, task_par.connection_string);
 
 	string source_image_path;
 	while (!fin.eof() && getline(fin, source_image_path))

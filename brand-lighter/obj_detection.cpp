@@ -14,10 +14,8 @@
 #include <iostream>
 # include <vector>
 
-
 using namespace cv;
 using namespace std;
-
 
 void draw_cluster_on_mat(Mat base_mat, map<int, vector<Point>> category_map)
 {
@@ -190,7 +188,6 @@ objdet_ret detect_obj_with_score(Mat source_mat, model_param model)
 //	cout << "---------------------------" << endl;
 //	cout << "[DEBUG] keypoints_object.size = " + to_string(keypoints_object.size()) << endl;
 //	cout << "[DEBUG] keypoints_scene.size = " + to_string(keypoints_scene.size()) << endl;
-
 
 	SurfDescriptorExtractor extractor;
 

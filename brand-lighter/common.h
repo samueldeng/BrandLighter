@@ -36,6 +36,7 @@ struct objdet_ret
 {
 	double score;
 	Mat visual_mat;
+	vector<Point> cluster_center_list;
 };
 
 model_param parse_model_file(string model_file_path);

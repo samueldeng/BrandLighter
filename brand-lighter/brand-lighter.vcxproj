@@ -84,12 +84,15 @@
   <ItemGroup>
     <ClInclude Include="dbscan.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="json-forwards.h" />
+    <ClInclude Include="json.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="brand-lighter.cpp" />
     <ClCompile Include="dbscan.cpp" />
+    <ClCompile Include="jsoncpp.cpp" />
     <ClCompile Include="obj_detection.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="score.cpp" />

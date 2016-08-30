@@ -21,12 +21,12 @@ using namespace std;
 
 void draw_cluster_on_mat(Mat base_mat, map<int, vector<Point>> category_map)
 {
-	cout << "---------------------------" << endl;
+//	cout << "---------------------------" << endl;
 	for (auto iter = category_map.begin(); iter != category_map.end(); ++iter)
 	{
 		int cluster_id = iter->first;
 		vector<Point> points_for_category = iter->second;
-		cout << "[DEBUG] cluster_id = " << cluster_id << " size = " << points_for_category.size() << endl;
+//		cout << "[DEBUG] cluster_id = " << cluster_id << " size = " << points_for_category.size() << endl;
 
 		/*
 		* Draw Minimum Enclsoing Box or Circle.
@@ -125,7 +125,7 @@ map<int, vector<Point>> cluster(vector<KeyPoint> best_point_in_scene, model_para
 double score_cluster(map<int, vector<Point>> category_map, model_param model)
 {
 	double object_sum = 0;
-	cout << "---------------------------" << endl;
+//	cout << "---------------------------" << endl;
 	for (auto iter = category_map.begin(); iter != category_map.end(); ++iter)
 	{
 		int cluster_id = iter->first;
@@ -134,11 +134,31 @@ double score_cluster(map<int, vector<Point>> category_map, model_param model)
 			continue;
 		auto cluster_confidence = model.score_func(cluster_size, 0);
 		object_sum += cluster_confidence;
-		cout << "[DEBUG] cluster_id = " << cluster_id << "  cluster_confidence = " << cluster_confidence << endl;
+//		cout << "[DEBUG] cluster_id = " << cluster_id << "  cluster_confidence = " << cluster_confidence << endl;
 	}
-	cout << "---------------------------" << endl;
-	cout << "detect " + model.model_name + " = " + to_string(object_sum) << endl;
+//	cout << "---------------------------" << endl;
+//	cout << "detect " + model.model_name + " = " + to_string(object_sum) << endl;
 	return object_sum;
+}
+
+vector<Point> center_of_cluster(map<int, vector<Point>> category_map)
+{
+	vector<Point> list;
+	for (auto cate : category_map)
+	{
+		if (cate.first < 0) continue;
+		int sum_x = 0;
+		int sum_y = 0;
+		for (auto p_list : cate.second)
+		{
+			sum_x += p_list.x;
+			sum_y += p_list.y;
+		}
+
+		Point center = Point(sum_x/category_map.size(), sum_y/category_map.size());
+		list.push_back(center);
+	}
+	return list;
 }
 
 objdet_ret detect_obj_with_score(Mat source_mat, model_param model)
@@ -167,9 +187,9 @@ objdet_ret detect_obj_with_score(Mat source_mat, model_param model)
 	detector.detect(img_object, keypoints_object);
 	detector.detect(img_scene, keypoints_scene);
 
-	cout << "---------------------------" << endl;
-	cout << "[DEBUG] keypoints_object.size = " + to_string(keypoints_object.size()) << endl;
-	cout << "[DEBUG] keypoints_scene.size = " + to_string(keypoints_scene.size()) << endl;
+//	cout << "---------------------------" << endl;
+//	cout << "[DEBUG] keypoints_object.size = " + to_string(keypoints_object.size()) << endl;
+//	cout << "[DEBUG] keypoints_scene.size = " + to_string(keypoints_scene.size()) << endl;
 
 
 	SurfDescriptorExtractor extractor;
@@ -210,5 +230,7 @@ objdet_ret detect_obj_with_score(Mat source_mat, model_param model)
 	ret.visual_mat = img_visual_cluster;
 
 	ret.score = score_cluster(category_map, model);
+	ret.cluster_center_list = center_of_cluster(category_map);
+
 	return ret;
 }
